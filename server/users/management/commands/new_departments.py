@@ -1,3 +1,5 @@
+from django.core.management.base import BaseCommand
+from users.models import Departament, Role
 DEPARTMENTS = {
     "QA": [
         "QA Engineer (Manual)",
@@ -70,7 +72,7 @@ DEPARTMENTS = {
         "Application Support Engineer",
     ],
 
-    "Enterprise & Platforms": [
+    "Enterprise&Platforms": [
         "ERP Consultant",
         "SAP Consultant",
         "Salesforce Developer",
@@ -78,15 +80,28 @@ DEPARTMENTS = {
         "Odoo Developer",
         "1C Developer",
         "Low-Code Developer",
-        "No-Code Developer",
-    ],
-
-    "Emerging Technologies": [
-        "Blockchain Developer",
-        "Web3 Developer",
-        "Game Developer",
-        "AR/VR Developer",
-        "IoT Engineer",
-        "Embedded Systems Engineer",
+        "No-Code Developer"
     ],
 }
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        department_list = []
+        roles_list = []
+        for dep, rls in DEPARTMENTS.items():
+            new_department = Departament(
+                name=dep,
+            )
+            if new_department not in department_list:
+                department_list.append(new_department)
+            if isinstance(rls, list):
+                for rl in rls:
+                    new_role = Role(
+                        name=rl,
+                        code=dep,
+                        department=new_department,
+                    )
+                    if new_role not in roles_list:
+                        roles_list.append(new_role)
+        Departament.objects.bulk_create(department_list)
+        Role.objects.bulk_create(roles_list)

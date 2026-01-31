@@ -81,11 +81,13 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "HOST": "127.0.0.1",
         "USER": os.getenv("DB_USER"),
-        "DBNAME": os.getenv("DB_NAME"),
+        "NAME": os.getenv("DB_NAME"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
-        "PART": 5432,
+        "PORT": '5432',
     }
 }
+print("DATABASES")
+print(DATABASES)
 
 
 # Password validation

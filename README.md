@@ -113,7 +113,7 @@ Initialization scripts are used to:
 Populates the database with predefined departments and roles.
 
 ```bash
-python manage.py departments
+./manage.py new_departments
 ```
 
 ## 🔐 Authentication & Users
@@ -288,7 +288,7 @@ JWT_REFRESH_TOKEN_LIFETIME_DAYS=7
 Заполняет базу данных предопределёнными департаментами и ролями.
 
 ```bash
-python manage.py departments
+./manage.py new_departments
 ```
 
 ## 🔐 Аутентификация и пользователи
