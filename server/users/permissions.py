@@ -13,6 +13,6 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         if view.action == 'create':
             return request.user and request.user.is_authenticated and request.user.is_seo_user
-        if view.action == 'update' or view.action == 'partial_update' or view.action == 'distroy':
+        if view.action == 'update' or view.action == 'partial_update' or view.action == 'destroy':
             created_by = object.created_by
             return request.user and request.user.is_authenticated and request.user.is_seo_user and request.user.id == created_by.id
