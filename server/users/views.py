@@ -13,6 +13,9 @@ class CompanyCRUDViewSet(viewsets.ModelViewSet):
     serializer_class =  CompanySerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 class EmployeeUserCreateAPIView(generics.CreateAPIView):
     queryset = EmployeeUser.objects.all()
     serializer_class = EmployeeSerializer

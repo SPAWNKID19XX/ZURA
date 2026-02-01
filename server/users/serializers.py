@@ -6,7 +6,11 @@ from .models import Company, EmployeeUser
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = ('name',)
+        fields = ('name', "created_by")
+        extra_kwargs = {
+            'created_by': {'write_only': True}
+        }
+
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:

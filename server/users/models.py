@@ -86,7 +86,7 @@ class EmployeeUser(AbstractUser):
         return f"{self.first_name}  {self.last_name}"
 
 class Company(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     #projects= models.ManyToManyField("Project",related_name="company")
     created_by = models.ForeignKey("EmployeeUser", on_delete=models.CASCADE, blank=True, null=True, related_name="companies")
 
