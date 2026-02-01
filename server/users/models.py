@@ -88,6 +88,7 @@ class EmployeeUser(AbstractUser):
 class Company(models.Model):
     name = models.CharField(max_length=100)
     #projects= models.ManyToManyField("Project",related_name="company")
+    created_by = models.ForeignKey("EmployeeUser", on_delete=models.CASCADE, blank=True, null=True, related_name="companies")
 
     def __str__(self):
         return self.name
