@@ -168,9 +168,17 @@ These fields are **not required**:
   - easy seeding
   - easy permission mapping in the future
 
+
+## 📖 API Documentation & Schema
+The Zura API is powered by OpenAPI 3.0. Use the links below to explore endpoints, schemas, and authentication requirements.
+* **Static ReDoc:** - http://127.0.0.1:8000/employeers/api/v1/redoc/
+  * (Best for clean, high-level reading)
+* **nteractive Swagger UI:** - http://127.0.0.1:8000/employeers/api/v1/docs/
+  * (Recommended for testing and development)
+* **Raw OpenAPI Schema (YAML/JSON)** - http://127.0.0.1:8000/employeers/api/v1/schema/
+  * Use this to generate automated TypeScript/TSX clients)
+
 ---
-
-
 
 
 <a name="Русский"></a>
@@ -342,6 +350,15 @@ JWT_REFRESH_TOKEN_LIFETIME_DAYS=7
   - единообразия
   - простого автозаполнения (seeding)
   - удобного расширения системы прав в будущем
+
+## 📖 Документация API и Схема
+Zura API построен на базе стандарта OpenAPI 3.0. Используйте ссылки ниже для изучения эндпоинтов, структур данных (схем) и требований к авторизации.
+* **Static ReDoc:** - http://127.0.0.1:8000/employees/api/v1/redoc/
+  * Чистая и удобная документация для чтения)
+* **nteractive Swagger UI:** - http://127.0.0.1:8000/employees/api/v1/docs/
+  * Интерактивная панель для тестирования запросов в реальном времени)
+* **Raw OpenAPI Schema (YAML/JSON)** - http://127.0.0.1:8000/employees/api/v1/schema/
+  * (Машиночитаемая схема для генерации TypeScript/TSX клиентов)
 
 ---
 
