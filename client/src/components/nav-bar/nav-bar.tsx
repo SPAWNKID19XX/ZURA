@@ -1,19 +1,15 @@
 import logo from "../../assets/img/logo.png"
 import styles from "./nav-bar.module.css"
 
-interface navLink {
+interface NavLink {
     id:number;
     option:string;
     href:string;
 }
 
-interface accountLink {
-    id:number;
-    option:string;
-    href:string;
-}
 
-const  accountLinks: accountLink[] = [
+
+const  accountLinks: NavLink[] = [
     {
         id: 0, 
         option: "Login",
@@ -26,7 +22,7 @@ const  accountLinks: accountLink[] = [
     }
 ]
 
-const navLinks: navLink[] = [
+const navLinks: NavLink[] = [
     {
         id: 0, 
         option: "Workspace/Dashboard",
@@ -60,38 +56,43 @@ const navLinks: navLink[] = [
 ]
 
 export function NavBar () {    
+    const isLoggedIn = false;
     return (
-        <>
-            
-            <div className="conteiner">
-                <nav>
-                    <div className={styles.logo}>
-                        <img src={logo} alt="Logo" />
-                    </div>
-                    <div className={styles.nav_menu}>
+        <div className="container">
+            <nav>
+                <div className={styles.logo}>
+                    <img src={logo} alt="Logo" />
+                </div>
+                <div className={styles.nav_menu}>
+                    {isLoggedIn ? (
                         <ul>
-                            {navLinks.map((link) => {
-                                return (
-                                    <li key={link.id}><a  href={link.href}>{link.option}</a></li>
-                                );
-                            })}                
-                        </ul>
-                    </div>
-                    <div className={styles.account}>
-                        <a className={styles.account_link} href="#">
-                            Account
-                        </a>
+                        {navLinks.map((link) => {
+                            return (
+                                <li key={link.id}><a  href={link.href}>{link.option}</a></li>
+                            );
+                        })}                
+                    </ul>
+                    ) : (
+                        <div className={styles.prompt_msg}>
+                            <h3 className={styles.neon_text}>Please <a href="/login">Login</a> to access your workspace</h3>
+                        </div>
+                    )}
+                    
+                </div>
+                <div className={styles.account}>
+                    <a className={styles.account_link} href="#">
+                        Account
+                    </a>
 
-                        <ul className={styles.submenu_login}>
-                            {accountLinks.map((link) => {
-                                return (
-                                    <li key={link.id}><a href={link.href}>{link.option}</a> </li>
-                                ); 
-                            })}
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </>
+                    <ul className={styles.submenu_login}>
+                        {accountLinks.map((link) => {
+                            return (
+                                <li key={link.id}><a href={link.href}>{link.option}</a> </li>
+                            ); 
+                        })}
+                    </ul>
+                </div>
+            </nav>
+        </div>
     )
 };

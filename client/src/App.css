@@ -4,7 +4,7 @@
   padding: 0;
   text-align: left;
 }
-.conteiner {
+.container {
   width: 90%;
   margin: 0 auto;
 }
@@ -45,6 +45,3 @@
   color: #888;
 }
 
-h1 {
-    border:2px solid red;
-}
