@@ -94,14 +94,11 @@ export function NavBar () {
                                 })}
                             </ul>
                         </>
-                        
                         ) : (
-                            <>
-                                <a className={styles.account_link} href="#">Full name</a>
-                                <a className={styles.account_link} href="#">Logout</a>
-                                
-                            
-                            </>
+                        <>
+                            <a className={styles.account_link} href="#">Full name</a>
+                            <a className={styles.account_link} href="#">Logout</a>                       
+                        </>
                         )
                     }
                 </div>
