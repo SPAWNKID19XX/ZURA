@@ -1,0 +1,7 @@
+.form_container{
+    border-left: 2px solid rgb(155, 151, 151);
+    width: 50%;
+    margin: 100px auto ;
+    padding: 50px 0;
+    border-radius: 50px;
+}

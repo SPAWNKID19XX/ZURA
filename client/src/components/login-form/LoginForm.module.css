@@ -1,0 +1,21 @@
+.form_title{
+    width: 70%;
+    margin: 0 auto;
+}
+
+form p {
+    width: 70%;
+    margin:  0  auto ;
+}
+
+form input {
+    width: 70%;
+    margin-bottom: 25px;
+}
+
+form button {
+    margin-left: auto;
+    display: flex;
+    background-color: gray;
+    border-radius: 10px;
+}
