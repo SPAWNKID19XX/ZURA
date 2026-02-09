@@ -13,6 +13,12 @@ form input {
     margin-bottom: 25px;
 }
 
+.form_paragraf{
+    display: flex;
+    flex-direction: column;
+
+}
+
 form button {
     margin-left: auto;
     display: flex;
