@@ -66,31 +66,44 @@ export function NavBar () {
                 <div className={styles.nav_menu}>
                     {isLoggedIn ? (
                         <ul>
-                        {navLinks.map((link) => {
-                            return (
-                                <li key={link.id}><a  href={link.href}>{link.option}</a></li>
-                            );
-                        })}                
-                    </ul>
-                    ) : (
-                        <div className={styles.prompt_msg}>
-                            <h3 className={styles.neon_text}>Please <a href="/login">Login</a> to access your workspace</h3>
-                        </div>
-                    )}
+                            {navLinks.map((link) => {
+                                return (
+                                    <li key={link.id}><a  href={link.href}>{link.option}</a></li>
+                                );
+                            })}                
+                        </ul>
+                        ) : (
+                            <div className={styles.prompt_msg}>
+                                <h3 className={styles.neon_text}>Please <a href="/login">Login</a> to access your workspace</h3>
+                            </div>
+                        )
+                    }
                     
                 </div>
                 <div className={styles.account}>
-                    <a className={styles.account_link} href="#">
-                        Account
-                    </a>
-
-                    <ul className={styles.submenu_login}>
-                        {accountLinks.map((link) => {
-                            return (
-                                <li key={link.id}><a href={link.href}>{link.option}</a> </li>
-                            ); 
-                        })}
-                    </ul>
+                    {!isLoggedIn ? (
+                        <>
+                            <a className={styles.account_link} href="#">
+                                Account
+                            </a>
+                            <ul className={styles.submenu_login}>
+                                {accountLinks.map((link) => {
+                                    return (
+                                        <li key={link.id}><a href={link.href}>{link.option}</a> </li>
+                                    ); 
+                                })}
+                            </ul>
+                        </>
+                        
+                        ) : (
+                            <>
+                                <a className={styles.account_link} href="#">Full name</a>
+                                <a className={styles.account_link} href="#">Logout</a>
+                                
+                            
+                            </>
+                        )
+                    }
                 </div>
             </nav>
         </div>
