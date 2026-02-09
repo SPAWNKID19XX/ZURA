@@ -13,12 +13,12 @@ const  accountLinks: NavLink[] = [
     {
         id: 0, 
         option: "Login",
-        href: "login"
+        href: "/login"
     },
     {
         id: 1, 
         option: "Signup",
-        href: "signup"
+        href: "/signup"
     }
 ]
 
