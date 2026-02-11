@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from urllib3 import request
 
 from .permissions import IsOwnerOrReadOnly
 from .models import Company, EmployeeUser
@@ -20,5 +21,13 @@ class EmployeeUserCreateAPIView(generics.CreateAPIView):
     queryset = EmployeeUser.objects.all()
     serializer_class = EmployeeSerializer
     permission_classes = (AllowAny,)
+
+class MeIdentificationRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = EmployeeSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
 
 

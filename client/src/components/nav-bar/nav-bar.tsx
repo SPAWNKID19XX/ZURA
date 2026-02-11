@@ -1,5 +1,9 @@
 import logo from "../../assets/img/logo.png"
 import styles from "./nav-bar.module.css"
+import { useContext } from "react";
+import { AuthContext } from "../../api/authContext";
+
+
 
 interface NavLink {
     id:number;
@@ -56,7 +60,9 @@ const navLinks: NavLink[] = [
 ]
 
 export function NavBar () {    
-    const isLoggedIn = false;
+    const { user } = useContext(AuthContext)!;
+    console.log("NAVBAR USER STATE:", user);
+    const isLoggedIn = !!user;
     return (
         <div className="container">
             <nav>
@@ -96,7 +102,7 @@ export function NavBar () {
                         </>
                         ) : (
                         <>
-                            <a className={styles.account_link} href="#">Full name</a>
+                            <a className={styles.account_link} href="#">{user.email}</a>
                             <a className={styles.account_link} href="#">Logout</a>                       
                         </>
                         )

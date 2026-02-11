@@ -1,7 +1,12 @@
-import { useState } from "react"
+import { useState, useContext  } from "react"
 import React from "react"
+import { useNavigate } from "react-router";
 import styles from "./LoginForm.module.css"
 import axios from "axios"
+import {getApi} from "../../api/api"
+
+import { AuthContext } from "../../api/authContext"; // Путь к твоему файлу с контекстом
+
 
 
 interface LoginRespons {
@@ -10,25 +15,35 @@ interface LoginRespons {
 }
 
 
+
 export function LoginForm() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const navigate = useNavigate();
+    const { loginSuccess } = useContext(AuthContext)!; 
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('+++',email);
         
         try {
-            const res = await axios.post("http://127.0.0.1:8000/employees/api/v1/token/", {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/token/`, {
             email: email,      // Твой стейт email
             password: password  // Твой стейт password
         });
-        console.log('+++***+++',res.data);
+            localStorage.setItem("access", res.data.access)
+            localStorage.setItem("refresh", res.data.refresh)
+            
+            const apiInstance = getApi(import.meta.env.VITE_API_URL)
+            const meIdentification = await apiInstance.get(`${import.meta.env.VITE_APP_EMPLOYEE}/me/`);
+            
+            loginSuccess(meIdentification.data); 
         
+            navigate("/");
         } catch (error: any) {
-        console.log("STATUS:", error?.response?.status);
-        console.log("DATA:", error?.response?.data);
+            console.log("STATUS:", error?.response?.status);
+            console.log("DATA:", error?.response?.data);
         }
+        
     }
 
 
