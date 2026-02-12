@@ -15,7 +15,7 @@ router.register('companies', CompanyCRUDViewSet, basename='companies')
 urlpatterns = [
     path('', include(router.urls)),
     path('me/', MeIdentificationRetrieveAPIView.as_view(), name='me'),
-    path('new_employer/', EmployeeUserCreateAPIView.as_view(), name='new_employer'),
+    path('new_employeer/', EmployeeUserCreateAPIView.as_view(), name='new_employer'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
