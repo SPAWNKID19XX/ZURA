@@ -171,11 +171,11 @@ These fields are **not required**:
 
 ## 📖 API Documentation & Schema
 The Zura API is powered by OpenAPI 3.0. Use the links below to explore endpoints, schemas, and authentication requirements.
-* **Static ReDoc:** - http://127.0.0.1:8000/employeers/api/v1/redoc/
+* **Static ReDoc:** - http://127.0.0.1:8000/redoc/
   * (Best for clean, high-level reading)
-* **nteractive Swagger UI:** - http://127.0.0.1:8000/employeers/api/v1/docs/
+* **interactive Swagger UI:** - http://127.0.0.1:8000/docs/
   * (Recommended for testing and development)
-* **Raw OpenAPI Schema (YAML/JSON)** - http://127.0.0.1:8000/employeers/api/v1/schema/
+* **Raw OpenAPI Schema (YAML/JSON)** - http://127.0.0.1:8000/schema/
   * Use this to generate automated TypeScript/TSX clients)
 
 ---
