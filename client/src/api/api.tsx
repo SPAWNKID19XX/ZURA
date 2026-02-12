@@ -9,11 +9,9 @@ export function getApi(url: string): AxiosInstance  {
     api.interceptors.request.use(
         (config) => {
             const accessToken = localStorage.getItem("access");
-            const refreshToken = localStorage.getItem("refresh");
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }
-            console.log("Interceptor отправил заголовок:", config.headers.Authorization);
             return config;
         },
         (error) => {

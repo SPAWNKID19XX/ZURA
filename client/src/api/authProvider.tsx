@@ -11,7 +11,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<Employeer | null>(null);
     const [loading, setLoading] = useState(true);
     const loginSuccess = (userData: Employeer) => {
-        console.log('++++++',userData);
         setUser(userData);
         setLoading(false);
     };
@@ -31,8 +30,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 
                 if (res.data) {
                     setUser(res.data);
-                    console.log(res.data);
-                    
                 }
             } catch (error) {
                 console.error("Auth init failed:", error);

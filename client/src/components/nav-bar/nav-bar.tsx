@@ -61,7 +61,6 @@ const navLinks: NavLink[] = [
 
 export function NavBar () {    
     const { user } = useContext(AuthContext)!;
-    console.log("NAVBAR USER STATE:", user);
     const isLoggedIn = !!user;
     return (
         <div className="container">
