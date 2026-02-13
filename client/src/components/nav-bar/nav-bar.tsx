@@ -2,7 +2,7 @@ import logo from "../../assets/img/logo.png"
 import styles from "./nav-bar.module.css"
 import { useContext } from "react";
 import { AuthContext } from "../../api/authContext";
-
+import { Link } from "react-router-dom";
 
 
 interface NavLink {
@@ -30,37 +30,38 @@ const navLinks: NavLink[] = [
     {
         id: 0, 
         option: "Workspace/Dashboard",
-        href: "link_to_Workspace/Dashboard"
+        href: "/link_to_Workspace/Dashboard"
     },
     {  
         id: 1, 
         option: "Projects",
-        href: "link_to_Projects"
+        href: "/link_to_Projects"
     },
     {
         id: 2, 
         option: "Boards",
-        href: "link_to_Boards"
+        href: "/link_to_Boards"
     },
     {
         id: 3, 
         option: "Teams",
-        href: "link_to_Teams"
+        href: "/link_to_Teams"
     },
     {  
         id: 4, 
         option: "My Tasks",
-        href: "link_to_My Tasks"
+        href: "/link_to_My Tasks"
     },
     {
         id: 5, 
         option: "Notifications",
-        href: "link_to_Notifications"
+        href: "/link_to_Notifications"
     }
 ]
 
 export function NavBar () {    
     const { user } = useContext(AuthContext)!;
+    const  { logout } = useContext(AuthContext)!;
     const isLoggedIn = !!user;
     return (
         <div className="container">
@@ -73,7 +74,7 @@ export function NavBar () {
                         <ul>
                             {navLinks.map((link) => {
                                 return (
-                                    <li key={link.id}><a  href={link.href}>{link.option}</a></li>
+                                    <li key={link.id}><Link to={link.href}>{link.option}</Link></li>
                                 );
                             })}                
                         </ul>
@@ -94,15 +95,32 @@ export function NavBar () {
                             <ul className={styles.submenu_login}>
                                 {accountLinks.map((link) => {
                                     return (
-                                        <li key={link.id}><a href={link.href}>{link.option}</a> </li>
+                                        <li key={link.id}><Link to={link.href}>{link.option}</Link></li>
                                     ); 
                                 })}
                             </ul>
                         </>
                         ) : (
                         <>
-                            <a className={styles.account_link} href="#">{user.email}</a>
-                            <a className={styles.account_link} href="#">Logout</a>                       
+                            <Link 
+                                className={styles.account_link} 
+                                to="/my_account"
+                                onClick={() => {
+                                    logout();
+                                }}
+                            >
+                                {user.email}
+                            </Link>            
+                            <a className={styles.account_link} href="#"></a>
+                            <Link 
+                                className={styles.account_link} 
+                                to="/login"
+                                onClick={() => {
+                                    logout();
+                                }}
+                            >
+                                Logout
+                            </Link>                       
                         </>
                         )
                     }

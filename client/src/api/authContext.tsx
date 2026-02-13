@@ -12,6 +12,8 @@ interface AuthContextType {
     user: Employeer | null,
     loading: boolean,
     loginSuccess: (userData:Employeer) => void;
+    logout: () => void; 
 }
+
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

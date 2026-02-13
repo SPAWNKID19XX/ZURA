@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AuthContext } from "./authContext";
 import { getApi } from "./api";
 import type { Employeer } from "./authContext";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
 const api = getApi(baseURL); 
@@ -10,10 +11,22 @@ const api = getApi(baseURL);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<Employeer | null>(null);
     const [loading, setLoading] = useState(true);
+    
+    const navigate = useNavigate(); 
+
     const loginSuccess = (userData: Employeer) => {
         setUser(userData);
         setLoading(false);
     };
+
+    const logout = () => {
+        localStorage.removeItem("access")
+        localStorage.removeItem("refresh")
+
+        setUser(null)
+        
+        navigate("/login")
+    }
 
 
     useEffect(() => {
@@ -42,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         initAuth();
     }, []); 
     return (
-        <AuthContext.Provider value={{ user, loading , loginSuccess}}>
+        <AuthContext.Provider value={{ user, loading , loginSuccess, logout}}>
             {/* Если loading = true, тут можно показать спиннер, но пока отдаем детей */}
             {children}
         </AuthContext.Provider>
