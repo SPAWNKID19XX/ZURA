@@ -5,6 +5,7 @@ from django.db import models
 # Create your models here.
 
 class UserManager(BaseUserManager):
+
     def create_user(self, email, password=None, **extra_fields):
         """
         Creates and saves a User with the given email, date of
@@ -19,7 +20,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_employee", True)
-        extra_fields.setdefault("is_seo_user", False)
         new_user=self.model(
             email=email,
             **extra_fields
@@ -28,6 +28,10 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have a password")
         new_user.set_password(password)
         new_user.save(using=self._db)
+        if extra_fields.get("companyName"):
+            print("****Company Name", extra_fields["companyName"])
+            Company.objects.create(name=extra_fields["companyName"], created_by=new_user).save(using=self._db)
+
         return new_user
 
     def create_superuser(self, email, password=None, **extra_fields):

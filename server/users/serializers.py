@@ -16,10 +16,12 @@ class CompanySerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeUser
-        fields = ('first_name', 'last_name', 'email', 'password','is_seo_user','is_employee','company', 'department', 'role')
+        fields = ('first_name', 'last_name', 'email', 'password', 'is_seo_user', 'is_employee', 'company', 'department',
+                  'role')
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
     def create(self, validated_data):
         instance = self.Meta.model(**validated_data)
         if validated_data['password']:
@@ -31,20 +33,30 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    password1 = serializers.CharField(write_only=True, label='Password', validators=[validate_password], required=True)
-    password2 = serializers.CharField(write_only=True, label='Password confirmation')
+    password = serializers.CharField(write_only=True, label='Password', validators=[validate_password], required=True)
+    password_confirm = serializers.CharField(write_only=True, label='Password confirmation')
+    companyName = serializers.CharField(write_only=True, label='Company Name', required=False)
+    is_seo_user = serializers.BooleanField(write_only=True, label='Is Seo User', required=False)
 
     class Meta:
         model = EmployeeUser
-        fields = ('email', 'password1', 'password2')
+        fields = ('email', 'password', 'password_confirm', "is_seo_user", "companyName")
 
     def validate(self, attrs):
-        if attrs['password1'] != attrs['password2']:
+        if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({'password': 'Passwords does not mutch'})
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop('password2')
-        password = validated_data.pop('password1')
-        return EmployeeUser.objects.create_user(password=password, **validated_data)
-#todo class EmployeeUserDetailSerializer(serializers.ModelSerializer):
+
+        validated_data.pop('password_confirm')
+        password = validated_data.pop('password')
+        is_seo_user = validated_data.pop('is_seo_user', False)
+        company_name = validated_data.pop('companyName', None)
+        new_user = EmployeeUser.objects.create_user(password=password, **validated_data, is_seo_user=is_seo_user)
+
+        if is_seo_user and company_name:
+            Company.objects.create(name=company_name, created_by=new_user)
+
+        return new_user
+# todo class EmployeeUserDetailSerializer(serializers.ModelSerializer):

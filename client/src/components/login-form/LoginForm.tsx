@@ -4,9 +4,7 @@ import { useNavigate } from "react-router";
 import styles from "./LoginForm.module.css"
 import axios from "axios"
 import {getApi} from "../../api/api"
-
-import { AuthContext } from "../../api/authContext"; // Путь к твоему файлу с контекстом
-
+import { AuthContext } from "../../api/authContext"; 
 
 
 interface LoginRespons {
@@ -27,8 +25,8 @@ export function LoginForm() {
         
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/token/`, {
-            email: email,      // Твой стейт email
-            password: password  // Твой стейт password
+            email: email,      
+            password: password 
         });
             localStorage.setItem("access", res.data.access)
             localStorage.setItem("refresh", res.data.refresh)
