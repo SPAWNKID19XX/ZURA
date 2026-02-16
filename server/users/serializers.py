@@ -35,7 +35,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, label='Password', validators=[validate_password], required=True)
     password_confirm = serializers.CharField(write_only=True, label='Password confirmation')
-    companyName = serializers.CharField(write_only=True, label='Company Name', required=False)
+    companyName = serializers.CharField(write_only=True,allow_blank=True,  label='Company Name', required=False)
     is_seo_user = serializers.BooleanField(write_only=True, label='Is Seo User', required=False)
 
     class Meta:
@@ -53,7 +53,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         is_seo_user = validated_data.pop('is_seo_user', False)
         company_name = validated_data.pop('companyName', None)
-        new_user = EmployeeUser.objects.create_user(password=password, **validated_data, is_seo_user=is_seo_user)
+        new_user = EmployeeUser.objects.create_user(password=password, is_seo_user=is_seo_user, **validated_data)
 
         if is_seo_user and company_name:
             Company.objects.create(name=company_name, created_by=new_user)

@@ -168,6 +168,52 @@ These fields are **not required**:
   - easy seeding
   - easy permission mapping in the future
 
+## 📝 Employee Registration (Frontend & Backend)
+The project implements a custom signup flow using React on the frontend and Django REST Framework on the 
+backend. This flow handles user creation and optional company initialization in a single atomic process.
+### 🚀 Features
+* Unified State Management: React uses a single formData object to manage all inputs (Email, Passwords, SEO Status, Company Name).
+* Dual-Layer Validation:
+  * Frontend: Instant password matching verification.
+  * Backend: Django REST Framework Serializer validation for email uniqueness and password strength.
+* Conditional Logic: The Company entity is only created if the user is flagged as a SEO User and provides a valid CompanyName.
+### 🛠 Backend Implementation (DRF)
+The SignUpSerializer handles the complexity of "popping" non-model fields from the request to prevent database errors:
+
+```bash
+# users/serializers.py snippet
+def create(self, validated_data):
+    # Extract non-model fields
+    password = validated_data.pop('password')
+    is_seo = validated_data.pop('is_seo_user', False)
+    company_name = validated_data.pop('companyName', None)
+    
+    # Create User using Custom Manager
+    user = EmployeeUser.objects.create_user(password=password, **validated_data)
+
+    # Optional Company Initialization
+    if is_seo and company_name:
+        Company.objects.create(name=company_name, created_by=user)
+    
+    return user
+
+```
+
+### 💻 Frontend Implementation (React)
+Uses Axios for asynchronous communication and dynamic error handling:
+```bash
+const handleSubmite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+        const res = await axios.post(`${API_URL}/new_employeer/`, formData);
+        // Successful redirect to /login
+    } catch (error: any) {
+        // Mapping DRF object errors to UI
+        setFieldErrors(error.response.data);
+    }
+};
+
+```
 
 ## 📖 API Documentation & Schema
 The Zura API is powered by OpenAPI 3.0. Use the links below to explore endpoints, schemas, and authentication requirements.
@@ -350,6 +396,53 @@ JWT_REFRESH_TOKEN_LIFETIME_DAYS=7
   - единообразия
   - простого автозаполнения (seeding)
   - удобного расширения системы прав в будущем
+
+## 📝 Регистрация сотрудников (Frontend & Backend)
+В проекте реализован кастомный процесс регистрации, объединяющий создание пользователя и автоматическую 
+инициализацию компании в одной транзакции.
+### 🚀 Особенности реализации
+* Единое состояние (State): На стороне React используется один объект formData для управления всеми полями (Email, пароли, статус SEO, название компании).
+* Двухуровневая валидация:
+  * Frontend: Мгновенная проверка совпадения паролей перед отправкой.
+  * Backend: Валидация через Django REST Framework Serializer на уникальность Email и сложность пароля.
+* Условная логика: Сущность Company создается только в том случае, если пользователь отмечен как is_seo_user и указал companyName.
+
+## 🛠 Реализация на бэкенде (DRF)
+SignUpSerializer обрабатывает сложные входящие данные, «вырезая» (pop) поля, которых нет в модели, 
+чтобы избежать ошибок базы данных:
+```bash
+# users/serializers.py snippet
+def create(self, validated_data):
+    # Extract non-model fields
+    password = validated_data.pop('password')
+    is_seo = validated_data.pop('is_seo_user', False)
+    company_name = validated_data.pop('companyName', None)
+    
+    # Create User using Custom Manager
+    user = EmployeeUser.objects.create_user(password=password, **validated_data)
+
+    # Optional Company Initialization
+    if is_seo and company_name:
+        Company.objects.create(name=company_name, created_by=user)
+    
+    return user
+
+```
+
+### 💻 Реализация на фронтенде (React
+Использование Axios для асинхронного взаимодействия и динамической обработки ошибок:
+```bash
+const handleSubmite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+        const res = await axios.post(`${API_URL}/new_employeer/`, formData);
+        // Successful redirect to /login
+    } catch (error: any) {
+        // Mapping DRF object errors to UI
+        setFieldErrors(error.response.data);
+    }
+};
+```
 
 ## 📖 Документация API и Схема
 Zura API построен на базе стандарта OpenAPI 3.0. Используйте ссылки ниже для изучения эндпоинтов, структур данных (схем) и требований к авторизации.
