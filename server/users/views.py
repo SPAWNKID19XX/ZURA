@@ -22,12 +22,11 @@ class EmployeeUserCreateAPIView(generics.CreateAPIView):
     serializer_class = SignUpSerializer
     permission_classes = (AllowAny,)
 
-class MeIdentificationRetrieveAPIView(generics.RetrieveAPIView):
+class MeIdentificationRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EmployeeSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_object(self):
         return self.request.user
-
 
 

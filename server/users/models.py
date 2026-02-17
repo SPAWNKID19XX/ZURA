@@ -80,6 +80,7 @@ class EmployeeUser(AbstractUser):
     company = models.ForeignKey("Company", on_delete=models.CASCADE, related_name="employees", null=True,blank=True)
     department = models.ForeignKey("department", on_delete=models.CASCADE,null=True,blank=True)
     role = models.ForeignKey("Role", on_delete=models.CASCADE, null=True,blank=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

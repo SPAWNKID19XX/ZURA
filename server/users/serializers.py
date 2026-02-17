@@ -16,10 +16,11 @@ class CompanySerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeUser
-        fields = ('first_name', 'last_name', 'email', 'password', 'is_seo_user', 'is_employee', 'company', 'department',
+        fields = ('first_name', 'last_name', 'email', 'phone', 'password', 'is_seo_user', 'is_employee', 'company',
+                  'department',
                   'role')
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True}, 'email': {'read_only': True}
         }
 
     def create(self, validated_data):
@@ -35,7 +36,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, label='Password', validators=[validate_password], required=True)
     password_confirm = serializers.CharField(write_only=True, label='Password confirmation')
-    companyName = serializers.CharField(write_only=True,allow_blank=True,  label='Company Name', required=False)
+    companyName = serializers.CharField(write_only=True, allow_blank=True, label='Company Name', required=False)
     is_seo_user = serializers.BooleanField(write_only=True, label='Is Seo User', required=False)
 
     class Meta:
