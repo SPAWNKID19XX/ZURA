@@ -32,7 +32,7 @@ export function LoginForm() {
             localStorage.setItem("refresh", res.data.refresh)
             
             const apiInstance = getApi(import.meta.env.VITE_API_URL)
-            const meIdentification = await apiInstance.get(`${import.meta.env.VITE_APP_EMPLOYEE}/me/`);
+            const meIdentification = await apiInstance.get(`${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`);
             
             loginSuccess(meIdentification.data); 
         

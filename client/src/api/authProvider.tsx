@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
 
             try {
-                const res = await api.get(`${import.meta.env.VITE_APP_EMPLOYEE}/me/`); 
+                const res = await api.get(`${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`);
                 
                 if (res.data) {
                     setUser(res.data);
