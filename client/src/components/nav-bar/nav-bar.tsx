@@ -105,13 +105,9 @@ export function NavBar () {
                             <Link 
                                 className={styles.account_link} 
                                 to="/my_account"
-                                onClick={() => {
-                                    logout();
-                                }}
                             >
                                 {user.email}
                             </Link>            
-                            <a className={styles.account_link} href="#"></a>
                             <Link 
                                 className={styles.account_link} 
                                 to="/login"

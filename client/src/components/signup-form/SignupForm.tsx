@@ -35,6 +35,9 @@ export function SignupForm() {
         }));
     
     }
+
+    console.log(serverError);
+    
     
     const handleSubmite = async (e: React.FormEvent) => {
         
