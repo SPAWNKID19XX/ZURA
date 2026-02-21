@@ -3,8 +3,8 @@ import axios from "axios"
 import {useEffect, useState} from "react";
 
 interface MyDataForm {
-    email: string,
-    first_name?: string| null,
+    email: string | null,
+    first_name?: string | null,
     last_name?: string| null,
     is_staff?: boolean| null,
     is_employee?: boolean| null,
@@ -12,7 +12,7 @@ interface MyDataForm {
     role?: string| null,
 }
 
-interface ChangePasswordForm {
+interface ChangePasswordInputs {
     current_password: string,
     password: string,
     confirm_password: string,
@@ -20,8 +20,37 @@ interface ChangePasswordForm {
 
 export function MyAccountForm() {
     const [myData, setMyData] = useState<MyDataForm | null>(null);
-    console.log('MyData==>',myData);
-    
+    const [modalVisible, setmodalVisible] = useState<string | null>(null);
+    const [changePasswordData, setChangePasswordData] = useState<ChangePasswordInputs>({
+        current_password: "",
+        password: "",
+        confirm_password: "",
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const { name, value, type, checked } = e.target;
+        const finalValue = type === 'checkbox' ? checked : value;
+
+        setMyData((prev) => {
+        if (!prev) return null; 
+
+        return {
+            ...prev,
+            [name]: finalValue
+        } as MyDataForm; 
+    });
+
+    }
+
+    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        
+        setChangePasswordData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    }
 
     useEffect(() => {
         const fetchMyData = async() =>{
@@ -31,7 +60,6 @@ export function MyAccountForm() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('----->',res.data);
             setMyData(res.data);
         } 
         
@@ -46,9 +74,10 @@ export function MyAccountForm() {
                 <label htmlFor="email_input">Email</label>
                 <input 
                     id="email_input"
+                    name="email"
                     type="email"  
                     placeholder="Email"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}
                     value={myData?.email || ""}
                     required 
                 />
@@ -58,9 +87,10 @@ export function MyAccountForm() {
                 <label htmlFor="first_name_input">First Name</label>
                 <input 
                     id="first_name_input"
+                    name="first_name"
                     type="text"  
                     placeholder="Insert First Name"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}    
                     value={myData?.first_name || ""}
                     required 
                 />
@@ -70,9 +100,10 @@ export function MyAccountForm() {
                 <label htmlFor="last_name_input">Last Name</label>
                 <input 
                     id="last_name_input"
+                    name="last_name"
                     type="text"  
                     placeholder="Insert Last Name"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}
                     value={myData?.last_name || ""}
                     required 
                 />
@@ -82,9 +113,10 @@ export function MyAccountForm() {
                 <label htmlFor="phone_input">Phone</label>
                 <input 
                     id="phone_input"
+                    name="phone"
                     type="text"  
                     placeholder="Insert Phone"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}
                     value={myData?.phone || ""}
                     required 
                 />
@@ -94,9 +126,10 @@ export function MyAccountForm() {
                 <label htmlFor="role_input">Role</label>
                 <input 
                     id="role_input"
+                    name="role"
                     type="text"  
                     placeholder="Insert Role"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}
                     value={myData?.role || ""}
                     required 
                 />
@@ -108,9 +141,10 @@ export function MyAccountForm() {
                 <label htmlFor="is_staff_input">Is Staff</label>
                 <input 
                     id="is_staff_input"
+                    name="is_staff"
                     type="checkbox"  
                     placeholder="Is Staff"
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    onChange={handleChange}
                     checked={myData?.is_staff || false}
                 />
             </p>
@@ -120,15 +154,48 @@ export function MyAccountForm() {
                 <input 
                     id="is_employee_input"
                     type="checkbox"  
-                    /*onChange={(e) => setEmail(e.target.value)}*/
+                    name="is_employee"
+                    onChange={handleChange}
                     checked={myData?.is_employee || false}
                 />
             </p>
             <p className={styles.form_paragraf}>
-                <a href="#">Forget password</a>
-                <a href="#">Change password</a>
+                <a href="#" onClick={() => setmodalVisible("change_password")} >Change Password</a>
+                {modalVisible === "change_password" && (
+                    <div className={styles.modal}>
+                        <p className={styles.form_modal_paragraf}>
+                            <label htmlFor="current_password">Current password</label>
+                            <input 
+                                id="current_password"
+                                name="current_password"
+                                type="password"  
+                                onChange={handleChangePassword}
+                                value={changePasswordData.current_password  || ""}
+                            />
+                        </p>
+                        <p className={styles.form_paragraf}>
+                            <label htmlFor="new_password">New password</label>
+                            <input 
+                                id="new_password"
+                                name="password"
+                                type="password"  
+                                onChange={handleChangePassword}
+                                value={changePasswordData.password  || ""}
+                            />
+                        </p>
+                        <p className={styles.form_paragraf}>
+                            <label htmlFor="confirm_password">Confirm password</label>
+                            <input 
+                                id="confirm_password"
+                                name="confirm_password"
+                                type="password"  
+                                onChange={handleChangePassword}
+                                value={changePasswordData.confirm_password  || ""}
+                            />
+                        </p>
+                    </div>
+                )}
             </p>
-
             <button type="submit">Update my Data</button>
         </form>
     );

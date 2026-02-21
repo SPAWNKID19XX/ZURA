@@ -13,6 +13,7 @@ form input {
     margin-bottom: 25px;
 }
 
+.form_modal_paragraf,
 .form_paragraf{
     display: flex;
     flex-direction: column;
@@ -24,4 +25,27 @@ form button {
     display: flex;
     background-color: gray;
     border-radius: 10px;
+}
+
+form .modal p{
+    width: 70%;
+    margin: 10px 0;
+}
+
+form .modal input {
+    width: 100%;
+    margin-bottom: 25px;
+    margin-left: 0;
+}
+
+form a {
+    color: rgb(30, 140, 184);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+form a:hover {
+    color: rgb(30, 184, 53);
+    text-decoration: underline;
+    cursor: pointer;
 }
