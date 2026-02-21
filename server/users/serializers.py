@@ -60,4 +60,29 @@ class SignUpSerializer(serializers.ModelSerializer):
             Company.objects.create(name=company_name, created_by=new_user)
 
         return new_user
-# todo class EmployeeUserDetailSerializer(serializers.ModelSerializer):
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    current_password = serializers.CharField(write_only=True, label='Old Password', required=True)
+    password = serializers.CharField(write_only=True, label='Password', required=True, validators=[validate_password])
+    confirm_password = serializers.CharField(write_only=True, label='Password confirmation', required=True)
+
+    class Meta:
+        model = EmployeeUser
+        fields = ('current_password', 'password', 'confirm_password')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({'new_password': 'Password does not match'})
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({'current_password': 'Current password does not correct!'})
+        return value
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['password'])
+        user.save()
+        return user

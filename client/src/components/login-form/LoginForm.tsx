@@ -40,6 +40,7 @@ export function LoginForm() {
         } catch (error: any) {
             console.log("STATUS:", error?.response?.status);
             console.log("DATA:", error?.response?.data);
+            alert( error?.response?.data?.detail || "Login failed. Please check your credentials and try again." );
         }
         
     }

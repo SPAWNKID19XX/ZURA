@@ -66,8 +66,52 @@ export function MyAccountForm() {
         fetchMyData();
     }, []);
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem("access");
+            await axios.patch(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`, myData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            alert("Data updated successfully!");
+            if (changePasswordData.current_password.length > 0 ) {
+                console.log("password has been introduced");
+                console.log('___',changePasswordData.current_password,changePasswordData.password, changePasswordData.confirm_password);
+                
+                if (changePasswordData.password === changePasswordData.confirm_password) {
+                    /** Change password logic here, e.g., make an API call to update the password */
+                    try {
+                        await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/change_password/`, changePasswordData, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+                        alert("Password updated successfully!");
+                        setChangePasswordData({
+                            current_password: "",
+                            password: "",
+                            confirm_password: "",
+                        });
+                        setmodalVisible(null);
+                    } catch (error) {
+                        console.error("Error updating password:", error);
+                        alert("Failed to update password.");
+                    }
+                } else {
+                    alert("New password and confirm password do not match.");
+                }        
+            }
+        } catch (error) {
+            console.error("Error updating data:", error);
+            alert("Failed to update data.");
+        }
+        
+    }
+
     return (
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
             <h3 className={styles.form_title}>{myData?.email} account</h3>
             
             <div className={styles.form_paragraf}>
@@ -79,7 +123,6 @@ export function MyAccountForm() {
                     placeholder="Email"
                     onChange={handleChange}
                     value={myData?.email || ""}
-                    required 
                 />
             </div>
             
@@ -94,7 +137,6 @@ export function MyAccountForm() {
                     placeholder="Insert First Name"
                     onChange={handleChange}    
                     value={myData?.first_name || ""}
-                    required 
                 />
             </div>
 
@@ -107,7 +149,6 @@ export function MyAccountForm() {
                     placeholder="Insert Last Name"
                     onChange={handleChange}
                     value={myData?.last_name || ""}
-                    required 
                 />
             </div>
 
@@ -120,7 +161,6 @@ export function MyAccountForm() {
                     placeholder="Insert Phone"
                     onChange={handleChange}
                     value={myData?.phone || ""}
-                    required 
                 />
             </div>
 
@@ -133,7 +173,6 @@ export function MyAccountForm() {
                     placeholder="Insert Role"
                     onChange={handleChange}
                     value={myData?.role || ""}
-                    required 
                 />
             </div>
 
