@@ -2,6 +2,8 @@ import  styles  from "./SignupForm.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from '@tanstack/react-query';
+
 
 interface Employee {
     email: string,
@@ -10,8 +12,6 @@ interface Employee {
     is_seo_user?: boolean,
     companyName?: string
 }
-
-
 
 
 
@@ -27,6 +27,27 @@ export function SignupForm() {
         companyName:""
     })
 
+    const signupMutation = useMutation({
+        mutationFn: async (data: Employee) => {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/new_employeer/`, data);
+            return res.data;
+        },
+        onSuccess: () => {
+            navigate("/login");
+        },
+        onError: (error: any) => {
+            if (error.response) {
+                if (typeof error.response.data === 'object') {
+                    setFieldErrors(error.response.data);
+                } else {
+                    setServerError("Server error occurred.");
+                }
+            } else {
+                setServerError("Network error. Please try again.");
+            }
+        }
+    });
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
         const {name, value, type, checked} = e.target;
         setFormData((prev) => ({
@@ -39,39 +60,24 @@ export function SignupForm() {
     console.log(serverError);
     
     
-    const handleSubmite = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         
-        console.log("handSubmit function", formData);
         e.preventDefault()
+        setFieldErrors(null)
         
         if (formData.password !== formData.password_confirm) {
             alert("Password does not match");
             return;
         }
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/new_employeer/`,formData)
-            console.log("FormData: ", formData);
-            console.log("+++Success",res);
-            navigate("/");
-        } catch (error: any) {
-            if (error.response) {
-                if (typeof error.response.data === 'object') {
-                    // Сохраняем весь объект ошибок от Django
-                    setFieldErrors(error.response.data); 
-                } else {
-                    setServerError("Server error occurred.");
-                }
-            } else {
-                setServerError("Network error. Please try again.");
-            }
-        } 
+        signupMutation.mutate(formData); 
     };
 
 
     return (
         <>
-            <form className={styles.form} action="" onSubmit={handleSubmite}>
+            <form className={styles.form} action="" onSubmit={handleSubmit}>
                 <h3 className={styles.form_title}>SignUp</h3>
+                {serverError && <p className={styles.error_main}>{serverError}</p>}
                     <p className={styles.form_paragraf}>
                         <label htmlFor="email">Email</label>
                         <input id="email" type="text" name="email" value={formData.email} onChange={handleChange} />
@@ -125,7 +131,7 @@ export function SignupForm() {
                         </div>
                     )}
 
-                    <button type="submit">SignUp</button>
+                    <button type="submit" disabled={signupMutation.isPending}>SignUp</button>
             </form>
         </>
     );

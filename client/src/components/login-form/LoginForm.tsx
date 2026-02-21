@@ -5,6 +5,7 @@ import styles from "./LoginForm.module.css"
 import axios from "axios"
 import {getApi} from "../../api/api"
 import { AuthContext } from "../../api/authContext"; 
+import { useMutation } from '@tanstack/react-query';
 
 
 interface LoginRespons {
@@ -19,29 +20,33 @@ export function LoginForm() {
     const [password, setPassword] = useState<string>("");
     const navigate = useNavigate();
     const { loginSuccess } = useContext(AuthContext)!; 
-    
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/token/`, {
-            email: email,      
-            password: password 
-        });
-            localStorage.setItem("access", res.data.access)
-            localStorage.setItem("refresh", res.data.refresh)
+
+    const loginMutation = useMutation({
+        mutationFn: async (credentials: { email: string; password: string }) => {
+            const res = await axios.post<LoginRespons>(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/token/`, credentials);
+            return res.data;
+        },
+        onSuccess: async (data) => {
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
             
-            const apiInstance = getApi(import.meta.env.VITE_API_URL)
+            const apiInstance = getApi(import.meta.env.VITE_API_URL);
             const meIdentification = await apiInstance.get(`${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`);
             
             loginSuccess(meIdentification.data); 
-        
             navigate("/");
-        } catch (error: any) {
+        },
+        onError: (error: any) => {
             console.log("STATUS:", error?.response?.status);
             console.log("DATA:", error?.response?.data);
             alert( error?.response?.data?.detail || "Login failed. Please check your credentials and try again." );
         }
+    });
+    
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        
+        loginMutation.mutate({ email, password });
         
     }
 
@@ -74,7 +79,9 @@ export function LoginForm() {
                 />
             </p>
                 
-            <button type="submit">Login</button>
+            <button type="submit" disabled={loginMutation.isPending}>
+                {loginMutation.isPending ? "Logging in..." : "Login"}
+            </button>
         </form>
     )
 }

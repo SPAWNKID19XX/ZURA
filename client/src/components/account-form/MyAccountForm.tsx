@@ -1,7 +1,11 @@
 import styles from "./MyAccountForm.module.css"
 import axios from "axios"
 import {useEffect, useState} from "react";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {getApi} from "../../api/api"
+
+const api = getApi(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}`);
+
 
 interface MyDataForm {
     email: string | null,
@@ -21,6 +25,7 @@ interface ChangePasswordInputs {
 
 
 export function MyAccountForm() {
+    const queryClient = useQueryClient();
     const [myData, setMyData] = useState<MyDataForm | null>(null);
     const [modalVisible, setmodalVisible] = useState<string | null>(null);
     const [changePasswordData, setChangePasswordData] = useState<ChangePasswordInputs>({
@@ -54,28 +59,34 @@ export function MyAccountForm() {
         }));
     }
 
+    const { data: serverData, isLoading } = useQuery({
+        queryKey: ['myAccount'],
+        queryFn: async () => {
+            const res = await api.get('/my_account/');
+            console.log("=====>",res.data);
+            
+            return res.data;
+        }
+    });
+
     useEffect(() => {
-        const fetchMyData = async() =>{
-            const token = localStorage.getItem("access");
-            const res =await axios.get(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setMyData(res.data);
-        } 
-        
-        fetchMyData();
-    }, []);
-
-    const api = getApi(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}`);
+        if (serverData) {
+            setMyData(serverData);
+        }
+    }, [serverData]);
 
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
-            await api.patch('/my_account/', myData);
-            alert("Data updated successfully!");
+            const res = await api.patch('/my_account/', myData);
+            queryClient.invalidateQueries({ queryKey: ['myAccount'] });
+            
+            if (res.status >= 200 && res.status < 300) {
+                alert("Data updated successfully!");
+            }
 
             if (changePasswordData.current_password.length > 0) {
                 if (changePasswordData.password === changePasswordData.confirm_password) {
@@ -98,9 +109,11 @@ export function MyAccountForm() {
                     alert("New password and confirm password do not match.");
                 }        
             }
-        } catch (error) {
-            console.error("Error updating data:", error);
-            alert("Failed to update data.");
+        } catch (error: any) {
+            console.error("Ошибка:", error.response?.data);
+            alert(`Failed: ${error.response?.data?.detail || "Something went wrong"}`);
+        } finally {
+            setIsSubmitting(false); 
         }
     };
 
@@ -230,7 +243,9 @@ export function MyAccountForm() {
                         </div>
                    </div>
                 )}
-            <button type="submit">Update my Data</button>
+            <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Updating..." : "Update my Data"}
+            </button>
         </form>
     );
 }
