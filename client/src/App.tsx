@@ -5,7 +5,7 @@ import { Footer } from "./components/footer/footer"
 import { LoginPage } from './pages/login-page/LoginPage'
 import { SignupPage } from './pages/signup-page/SignupPage'
 import { MyAccountPage } from './pages/my-account-page/MyAccountPage'
-import ProtectedRoute from './api/privateRouts'
+import {ProtectedRoute} from './api/privateRouts'
 
 function App() {
   return (  
