@@ -70,7 +70,7 @@ export function MyAccountForm() {
         <form className={styles.form}>
             <h3 className={styles.form_title}>{myData?.email} account</h3>
             
-            <p className={styles.form_paragraf}>
+            <div className={styles.form_paragraf}>
                 <label htmlFor="email_input">Email</label>
                 <input 
                     id="email_input"
@@ -81,9 +81,11 @@ export function MyAccountForm() {
                     value={myData?.email || ""}
                     required 
                 />
-            </p>
+            </div>
             
-            <p className={styles.form_paragraf}>
+            
+
+            <div className={styles.form_paragraf}>
                 <label htmlFor="first_name_input">First Name</label>
                 <input 
                     id="first_name_input"
@@ -94,9 +96,9 @@ export function MyAccountForm() {
                     value={myData?.first_name || ""}
                     required 
                 />
-            </p>
+            </div>
 
-            <p className={styles.form_paragraf}>
+            <div  className={styles.form_paragraf}>
                 <label htmlFor="last_name_input">Last Name</label>
                 <input 
                     id="last_name_input"
@@ -107,9 +109,9 @@ export function MyAccountForm() {
                     value={myData?.last_name || ""}
                     required 
                 />
-            </p>
+            </div>
 
-            <p className={styles.form_paragraf}>
+            <div className={styles.form_paragraf}>
                 <label htmlFor="phone_input">Phone</label>
                 <input 
                     id="phone_input"
@@ -120,9 +122,9 @@ export function MyAccountForm() {
                     value={myData?.phone || ""}
                     required 
                 />
-            </p>
+            </div>
 
-            <p className={styles.form_paragraf}>
+            <div className={styles.form_paragraf}>
                 <label htmlFor="role_input">Role</label>
                 <input 
                     id="role_input"
@@ -133,11 +135,11 @@ export function MyAccountForm() {
                     value={myData?.role || ""}
                     required 
                 />
-            </p>
+            </div>
 
 
 
-            <p className={styles.form_paragraf}>
+            <div className={styles.form_paragraf}>
                 <label htmlFor="is_staff_input">Is Staff</label>
                 <input 
                     id="is_staff_input"
@@ -147,9 +149,9 @@ export function MyAccountForm() {
                     onChange={handleChange}
                     checked={myData?.is_staff || false}
                 />
-            </p>
+            </div>
 
-            <p className={styles.form_paragraf}>
+            <div className={styles.form_paragraf}>
                 <label htmlFor="is_employee_input">Is Employee</label>
                 <input 
                     id="is_employee_input"
@@ -158,12 +160,11 @@ export function MyAccountForm() {
                     onChange={handleChange}
                     checked={myData?.is_employee || false}
                 />
-            </p>
-            <p className={styles.form_paragraf}>
+            </div>
                 <a href="#" onClick={() => setmodalVisible("change_password")} >Change Password</a>
                 {modalVisible === "change_password" && (
-                    <div className={styles.modal}>
-                        <p className={styles.form_modal_paragraf}>
+                    <div className={styles.pass_modal}>
+                        <div className={styles.form_pass_modal_paragraf}>
                             <label htmlFor="current_password">Current password</label>
                             <input 
                                 id="current_password"
@@ -172,8 +173,8 @@ export function MyAccountForm() {
                                 onChange={handleChangePassword}
                                 value={changePasswordData.current_password  || ""}
                             />
-                        </p>
-                        <p className={styles.form_paragraf}>
+                        </div>
+                        <div className={styles.form_pass_modal_paragraf}>
                             <label htmlFor="new_password">New password</label>
                             <input 
                                 id="new_password"
@@ -182,8 +183,8 @@ export function MyAccountForm() {
                                 onChange={handleChangePassword}
                                 value={changePasswordData.password  || ""}
                             />
-                        </p>
-                        <p className={styles.form_paragraf}>
+                        </div>
+                        <div className={styles.form_pass_modal_paragraf}>
                             <label htmlFor="confirm_password">Confirm password</label>
                             <input 
                                 id="confirm_password"
@@ -192,10 +193,9 @@ export function MyAccountForm() {
                                 onChange={handleChangePassword}
                                 value={changePasswordData.confirm_password  || ""}
                             />
-                        </p>
-                    </div>
+                        </div>
+                   </div>
                 )}
-            </p>
             <button type="submit">Update my Data</button>
         </form>
     );

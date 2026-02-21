@@ -3,21 +3,17 @@
     margin: 0 auto;
 }
 
-form p {
-    width: 70%;
-    margin:  0  auto ;
-}
-
 form input {
     width: 70%;
     margin-bottom: 25px;
 }
 
-.form_modal_paragraf,
+
 .form_paragraf{
     display: flex;
     flex-direction: column;
-
+    width: 70%;
+    margin: 0 auto;
 }
 
 form button {
@@ -27,13 +23,22 @@ form button {
     border-radius: 10px;
 }
 
-form .modal p{
+.form .pass_modal {
+    display: flex;
+    flex-direction: column;
     width: 70%;
-    margin: 10px 0;
+    margin: 0 auto;
 }
 
-form .modal input {
+.form_pass_modal_paragraf {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    margin-bottom: 25px;
+}
+
+form .pass_modal input {
+    width: 70%;
     margin-bottom: 25px;
     margin-left: 0;
 }
