@@ -1,0 +1,46 @@
+.form_title{
+    width: 70%;
+    margin: 0 auto;
+}
+
+form p {
+    width: 70%;
+    margin:  0  auto ;
+}
+
+form input {
+    width: 70%;
+    margin-bottom: 25px;
+}
+
+.form_paragraf{
+    display: flex;
+    flex-direction: column;
+
+}
+
+form button {
+    margin-left: auto;
+    display: flex;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+form .error_container {
+    width: 70%;
+    margin: 0 auto;
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+
+form .error_title {
+    color: red;
+}
+
+form .error_text {
+    color: rgb(169, 142, 32);
+}

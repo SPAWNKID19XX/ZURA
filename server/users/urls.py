@@ -1,0 +1,27 @@
+from django.urls import path, include
+from .views import CompanyCRUDViewSet, EmployeeUserCreateAPIView, MeIdentificationRetrieveUpdateDeleteAPIView, ChangePasswordView
+from rest_framework import routers
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
+
+router = routers.DefaultRouter()
+
+router.register('companies', CompanyCRUDViewSet, basename='companies')
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('change_password/', ChangePasswordView.as_view(), name='change_password'),
+    path('my_account/', MeIdentificationRetrieveUpdateDeleteAPIView.as_view(), name='my_account'),
+    path('new_employeer/', EmployeeUserCreateAPIView.as_view(), name='SignUpSerializer'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    # Documentation (OpenAPI 3.0)
+
+
+]

@@ -1,0 +1,62 @@
+import React, { useState, useEffect } from "react";
+import { AuthContext } from "./authContext";
+import { getApi } from "./api";
+import type { Employeer } from "./authContext";
+import { useNavigate } from "react-router-dom";
+
+const baseURL = import.meta.env.VITE_API_URL;
+const api = getApi(baseURL); 
+
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [user, setUser] = useState<Employeer | null>(null);
+    const [loading, setLoading] = useState(true);
+    
+    const navigate = useNavigate(); 
+
+    const loginSuccess = (userData: Employeer) => {
+        setUser(userData);
+        setLoading(false);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("access")
+        localStorage.removeItem("refresh")
+
+        setUser(null)
+        
+        navigate("/login")
+    }
+
+
+    useEffect(() => {
+        const initAuth = async () => {
+            const token = localStorage.getItem("access");
+            
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const res = await api.get(`${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`);
+                
+                if (res.data) {
+                    setUser(res.data);
+                }
+            } catch (error) {
+                console.error("Auth init failed:", error);
+                logout();
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initAuth();
+    }, []); 
+    return (
+        <AuthContext.Provider value={{ user, loading , loginSuccess, logout}}>
+            {children}
+        </AuthContext.Provider>
+    );
+};

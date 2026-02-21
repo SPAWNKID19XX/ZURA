@@ -1,0 +1,56 @@
+.form_title{
+    width: 70%;
+    margin: 0 auto;
+}
+
+form input {
+    width: 70%;
+    margin-bottom: 25px;
+}
+
+
+.form_paragraf{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+}
+
+form button {
+    margin-left: auto;
+    display: flex;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.form .pass_modal {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.form_pass_modal_paragraf {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+form .pass_modal input {
+    width: 70%;
+    margin-bottom: 25px;
+    margin-left: 0;
+}
+
+form a {
+    color: rgb(30, 140, 184);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+form a:hover {
+    color: rgb(30, 184, 53);
+    text-decoration: underline;
+    cursor: pointer;
+}
