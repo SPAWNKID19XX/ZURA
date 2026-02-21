@@ -1,6 +1,7 @@
 import styles from "./MyAccountForm.module.css"
 import axios from "axios"
 import {useEffect, useState} from "react";
+import {getApi} from "../../api/api"
 
 interface MyDataForm {
     email: string | null,
@@ -17,6 +18,7 @@ interface ChangePasswordInputs {
     password: string,
     confirm_password: string,
 }
+
 
 export function MyAccountForm() {
     const [myData, setMyData] = useState<MyDataForm | null>(null);
@@ -66,28 +68,21 @@ export function MyAccountForm() {
         fetchMyData();
     }, []);
 
+    const api = getApi(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}`);
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const token = localStorage.getItem("access");
-            await axios.patch(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/my_account/`, myData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            await api.patch('/my_account/', myData);
             alert("Data updated successfully!");
-            if (changePasswordData.current_password.length > 0 ) {
-                console.log("password has been introduced");
-                console.log('___',changePasswordData.current_password,changePasswordData.password, changePasswordData.confirm_password);
-                
+
+            if (changePasswordData.current_password.length > 0) {
                 if (changePasswordData.password === changePasswordData.confirm_password) {
-                    /** Change password logic here, e.g., make an API call to update the password */
                     try {
-                        await axios.post(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}/change_password/`, changePasswordData, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        });
+                        // 2. Смена пароля тоже через наш 'api'
+                        await api.post('/change_password/', changePasswordData);
+                        
                         alert("Password updated successfully!");
                         setChangePasswordData({
                             current_password: "",
@@ -107,8 +102,8 @@ export function MyAccountForm() {
             console.error("Error updating data:", error);
             alert("Failed to update data.");
         }
-        
-    }
+    };
+
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>

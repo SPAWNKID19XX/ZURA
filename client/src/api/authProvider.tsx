@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
             } catch (error) {
                 console.error("Auth init failed:", error);
-                setUser(null);
+                logout();
             } finally {
                 setLoading(false);
             }
@@ -56,7 +56,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []); 
     return (
         <AuthContext.Provider value={{ user, loading , loginSuccess, logout}}>
-            {/* Если loading = true, тут можно показать спиннер, но пока отдаем детей */}
             {children}
         </AuthContext.Provider>
     );
