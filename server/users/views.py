@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsSeoUser
 from .models import Company, EmployeeUser
 from .serializers import CompanySerializer, EmployeeSerializer, SignUpSerializer, ChangePasswordSerializer
 
@@ -17,7 +17,7 @@ class CompanyCRUDViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-class EmployeeUserCreateAPIView(generics.CreateAPIView):
+class EmployeeSeoCreateAPIView(generics.CreateAPIView):
     queryset = EmployeeUser.objects.all()
     serializer_class = SignUpSerializer
     permission_classes = (AllowAny,)
@@ -39,4 +39,22 @@ class ChangePasswordView(APIView):
             serializer.save()
             return Response({'detail': "Password updated"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HireCrudEmployeeAPIView(viewsets.ModelViewSet):
+    serializer_class = EmployeeSerializer
+    permission_classes = (IsAuthenticated,IsSeoUser)
+
+    def get_queryset(self):
+        return EmployeeUser.objects.filter(company= self.request.user.company).exclude(id=self.request.user.id)
+
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user,
+            is_staff=True,
+            is_seo_user=False,
+            password='admin12345',
+            company=self.request.user.company,
+        )
+
 

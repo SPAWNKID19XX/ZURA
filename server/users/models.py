@@ -75,7 +75,6 @@ class EmployeeUser(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     is_seo_user = models.BooleanField(default=False)
     is_employee = models.BooleanField(default=True)
-    #todo company field pk to model company witch can be created only by is_seo_user
     avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
     company = models.ForeignKey("Company", on_delete=models.CASCADE, related_name="employees", null=True,blank=True)
     department = models.ForeignKey("department", on_delete=models.CASCADE,null=True,blank=True)
@@ -92,7 +91,6 @@ class EmployeeUser(AbstractUser):
 
 class Company(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    #projects= models.ManyToManyField("Project",related_name="company")
     created_by = models.ForeignKey("EmployeeUser", on_delete=models.CASCADE, blank=True, null=True, related_name="companies")
 
     def __str__(self):

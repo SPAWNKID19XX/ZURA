@@ -29,8 +29,8 @@ const  accountLinks: NavLink[] = [
 const navLinks: NavLink[] = [
     {
         id: 0, 
-        option: "Workspace/Dashboard",
-        href: "/link_to_Workspace/Dashboard"
+        option: "Employee list",
+        href: "/employees_list"
     },
     {  
         id: 1, 

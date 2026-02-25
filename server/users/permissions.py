@@ -23,3 +23,12 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             if not is_owner:
                 logger.debug(f"Access danied for User: {request.user.id} becouse owner on Object is: {object.id}")
             return is_owner
+
+
+class IsSeoUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return bool(
+            request.user and
+            request.user.is_authenticated and
+            getattr(request.user, "is_seo_user", False)
+        )

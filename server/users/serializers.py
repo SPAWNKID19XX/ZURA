@@ -1,6 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-
+from django.db import transaction
 from .models import Company, EmployeeUser
 
 
@@ -23,19 +23,32 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}, 'email': {'read_only': True}
         }
 
+    @transaction.atomic
     def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        company_name = validated_data.pop('company', None)
         instance = self.Meta.model(**validated_data)
-        if validated_data['password']:
-            instance.set_password(validated_data['password'])
-            instance.save()
+
+        if password:
+            instance.set_password(password)
         else:
-            raise serializers.ValidationError({'password': 'Password mast be introduced'})
+            raise serializers.ValidationError({'password': 'Password must be introduced'})
+
+        if company_name:
+            if isinstance(company_name, str):
+                instance.save()
+                company, created = Company.objects.get_or_create(name=company_name, created_by=instance)
+                instance.company = company
+            else:
+                instance.company = company_name
+
+        instance.save()
         return instance
 
 
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, label='Password', validators=[validate_password], required=True)
-    password_confirm = serializers.CharField(write_only=True, label='Password confirmation')
+    password_confirm = serializers.CharField(write_only=True, label='Password confirmation', required=True)
     companyName = serializers.CharField(write_only=True, allow_blank=True, label='Company Name', required=False)
     is_seo_user = serializers.BooleanField(write_only=True, label='Is Seo User', required=False)
 
@@ -44,15 +57,15 @@ class SignUpSerializer(serializers.ModelSerializer):
         fields = ('email', 'password', 'password_confirm', "is_seo_user", "companyName")
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({'password': 'Passwords does not mutch'})
+        if attrs.get('password') != attrs.get('password_confirm'):
+            raise serializers.ValidationError({'password': 'Passwords do not match'})
         return attrs
 
     def create(self, validated_data):
 
         validated_data.pop('password_confirm')
         password = validated_data.pop('password')
-        is_seo_user = validated_data.pop('is_seo_user', False)
+        is_seo_user = validated_data.pop('is_seo_user', True)
         company_name = validated_data.pop('companyName', None)
         new_user = EmployeeUser.objects.create_user(password=password, is_seo_user=is_seo_user, **validated_data)
 
@@ -75,10 +88,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'new_password': 'Password does not match'})
         return attrs
 
-    def validate_old_password(self, value):
+    def validate_current_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError({'current_password': 'Current password does not correct!'})
+            raise serializers.ValidationError('Current password is not correct.')
         return value
 
     def save(self, **kwargs):
