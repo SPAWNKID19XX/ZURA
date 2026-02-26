@@ -14,13 +14,18 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(source='department.name', read_only=True, allow_null=True)
+
     class Meta:
         model = EmployeeUser
-        fields = ('first_name', 'last_name', 'email', 'phone', 'password', 'is_seo_user', 'is_employee', 'company',
-                  'department',
-                  'role')
+        fields = ('id', 'first_name', 'last_name', 'email', 'phone', 'password', 'is_seo_user', 'is_employee',
+                  'company', 'department', 'department_name', 'role')
         extra_kwargs = {
-            'password': {'write_only': True}, 'email': {'read_only': True}
+            'password': {'write_only': True},
+            'email': {'read_only': True},
+            'id': {'read_only': True},
+            'department': {'required': True, 'allow_null': False},
+            'role': {'required': True, 'allow_null': False},
         }
 
     @transaction.atomic

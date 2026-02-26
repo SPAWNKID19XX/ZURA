@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from users.models import Departament, Role
+from users.models import Department, Role
 DEPARTMENTS = {
     "QA": [
         "QA Engineer (Manual)",
@@ -58,7 +58,7 @@ DEPARTMENTS = {
         "Product Owner",
     ],
 
-    "Business & Analysis": [
+    "Business & Analysis    ": [
         "Business Analyst",
         "System Analyst",
         "Functional Analyst",
@@ -89,7 +89,7 @@ class Command(BaseCommand):
         department_list = []
         roles_list = []
         for dep, rls in DEPARTMENTS.items():
-            new_department = Departament(
+            new_department = Department(
                 name=dep,
             )
             if new_department not in department_list:
@@ -103,5 +103,5 @@ class Command(BaseCommand):
                     )
                     if new_role not in roles_list:
                         roles_list.append(new_role)
-        Departament.objects.bulk_create(department_list)
+        Department.objects.bulk_create(department_list)
         Role.objects.bulk_create(roles_list)

@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .permissions import IsOwnerOrReadOnly, IsSeoUser
+from .permissions import IsOwnerOrReadOnly, IsSeoUserOrReadOnly
 from .models import Company, EmployeeUser
 from .serializers import CompanySerializer, EmployeeSerializer, SignUpSerializer, ChangePasswordSerializer
 
@@ -43,7 +43,7 @@ class ChangePasswordView(APIView):
 
 class HireCrudEmployeeAPIView(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
-    permission_classes = (IsAuthenticated,IsSeoUser)
+    permission_classes = (IsSeoUserOrReadOnly,)
 
     def get_queryset(self):
         return EmployeeUser.objects.filter(company= self.request.user.company).exclude(id=self.request.user.id)

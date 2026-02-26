@@ -6,6 +6,7 @@ import { LoginPage } from './pages/login-page/LoginPage'
 import { SignupPage } from './pages/signup-page/SignupPage'
 import { MyAccountPage } from './pages/my-account-page/MyAccountPage'
 import { TasksPage } from './pages/tasks-page/TasksPage'
+import { CreateTaskPage } from './pages/tasks-page/CreateTaskPage'
 import { ProjectsPage } from './pages/projects-page/ProjectsPage'
 import { BoardsPage } from './pages/boards-page/BoardsPage'
 import { TeamsPage } from './pages/teams-page/TeamsPage'
@@ -24,6 +25,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/my_account" element={<MyAccountPage />} />
           <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/tasks/create" element={<CreateTaskPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/boards" element={<BoardsPage />} />
           <Route path="/teams" element={<TeamsPage />} />

@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getApi } from '../../api/api'
+import { AuthContext } from '../../api/authContext'
 import styles from './TasksPage.module.css'
 
 const api = getApi(`${import.meta.env.VITE_API_URL}/tasks/api/v1`)
@@ -28,8 +30,13 @@ const PRIORITY_LABELS: Record<Task['priority'], string> = {
     high: 'High',
 }
 
+const TASK_CREATOR_DEPARTMENTS = ['QA', 'Development', 'DevOps', 'Cybersecurity', 'Design', 'Management', 'Business & Analysis']
+
 export function TasksPage() {
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
+    const { user } = useContext(AuthContext)!
+    const canCreateTask = user?.is_seo_user || TASK_CREATOR_DEPARTMENTS.includes(user?.department_name ?? '')
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
     const [saving, setSaving] = useState(false)
 
@@ -63,7 +70,14 @@ export function TasksPage() {
 
     return (
         <div className={styles.page}>
-            <h1 className={styles.title}>My Tasks</h1>
+            <div className={styles.page_header}>
+                <h1 className={styles.title}>My Tasks</h1>
+                {canCreateTask && (
+                    <button className={styles.create_btn} onClick={() => navigate('/tasks/create')}>
+                        + Create Task
+                    </button>
+                )}
+            </div>
 
             {tasks && tasks.length === 0 && (
                 <p className={styles.empty}>No tasks assigned to you.</p>

@@ -1,11 +1,12 @@
 import { createContext } from 'react';
 
 export interface Employeer {
-    email:string,
+    email: string,
     first_name?: string,
     last_name?: string,
     is_employeer?: boolean,
-    is_seo_user?: boolean
+    is_seo_user?: boolean,
+    department_name?: string | null,
 }
 
 interface AuthContextType {

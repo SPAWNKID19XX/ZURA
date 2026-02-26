@@ -3,11 +3,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Task
 from .serializers import TaskSerializer
+from users.permissions import CanCreateTask
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, CanCreateTask)
 
     def get_queryset(self):
         qs = Task.objects.filter(company=self.request.user.company).order_by('-created_at')
