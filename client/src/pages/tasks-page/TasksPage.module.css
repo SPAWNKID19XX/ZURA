@@ -1,0 +1,215 @@
+.page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.state,
+.empty {
+    text-align: center;
+    color: #888;
+    margin-top: 40px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+}
+
+.item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.item_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.item_title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.item_footer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Status badges */
+.status {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.status_todo {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.status_in_progress {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status_done {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Priority badges */
+.priority {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.priority_low {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.priority_medium {
+    background: #fefce8;
+    color: #ca8a04;
+}
+
+.priority_high {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.due_date {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Modal */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #6b7280;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #111;
+}
+
+.modal_title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-right: 24px;
+}
+
+.modal_meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.status_row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.status_label {
+    font-size: 13px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.status_buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.status_btn {
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    opacity: 0.45;
+    transition: opacity 0.15s, border-color 0.15s;
+    background: inherit;
+}
+
+.status_btn:hover:not(:disabled) {
+    opacity: 0.75;
+}
+
+.status_btn_active {
+    opacity: 1;
+    border-color: currentColor;
+}
+
+.status_btn:disabled {
+    cursor: not-allowed;
+}
+
+.modal_author {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.modal_description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #374151;
+    white-space: pre-wrap;
+}

@@ -87,7 +87,7 @@ class EmployeeUser(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return f"{self.first_name}  {self.last_name}"
+        return f"{self.email}"
 
 class Company(models.Model):
     name = models.CharField(max_length=100, unique=True)

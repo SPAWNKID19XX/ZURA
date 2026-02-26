@@ -10,7 +10,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Task.objects.filter(company=self.request.user.company).order_by('-created_at')
+        qs = Task.objects.filter(company=self.request.user.company).order_by('-created_at')
+        if self.request.query_params.get('mine') == 'true':
+            qs = qs.filter(assigned_to=self.request.user)
+        return qs
 
     def perform_create(self, serializer):
         serializer.save(

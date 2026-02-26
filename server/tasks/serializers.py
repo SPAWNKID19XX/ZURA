@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from .models import Task
+from django.contrib.auth import get_user_model
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -23,8 +24,7 @@ class TaskSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
         if request and request.user.is_authenticated and request.user.company:
-            from django.contrib.auth import get_user_model
             User = get_user_model()
             self.fields['assigned_to'].queryset = User.objects.filter(
-                company=request.user.company
+                company=request.user.company.id
             )
