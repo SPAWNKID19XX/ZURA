@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import HireCrudEmployeeAPIView, CompanyCRUDViewSet, EmployeeSeoCreateAPIView, MeIdentificationRetrieveUpdateDeleteAPIView, ChangePasswordView
+from .views import HireCrudEmployeeAPIView, CompanyCRUDViewSet, EmployeeSeoCreateAPIView, MeIdentificationRetrieveUpdateDeleteAPIView, ChangePasswordView, DepartmentListView, RoleListView
 from rest_framework import routers
 
 from rest_framework_simplejwt.views import (
@@ -14,6 +14,8 @@ router.register('companies', CompanyCRUDViewSet, basename='companies')
 router.register(r'my_employeers', HireCrudEmployeeAPIView, basename='my_employeers')
 urlpatterns = [
     path('', include(router.urls)),
+    path('departments/', DepartmentListView.as_view(), name='departments'),
+    path('roles/', RoleListView.as_view(), name='roles'),
     path('change_password/', ChangePasswordView.as_view(), name='change_password'),
     path('my_account/', MeIdentificationRetrieveUpdateDeleteAPIView.as_view(), name='my_account'),
     path('new_seo/', EmployeeSeoCreateAPIView.as_view(), name='new_seo'),

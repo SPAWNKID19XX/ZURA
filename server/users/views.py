@@ -4,11 +4,23 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .permissions import IsOwnerOrReadOnly, IsSeoUserOrReadOnly
-from .models import Company, EmployeeUser
-from .serializers import CompanySerializer, EmployeeSerializer, SignUpSerializer, ChangePasswordSerializer
+from .models import Company, Department, EmployeeUser, Role
+from .serializers import CompanySerializer, DepartmentSerializer, EmployeeSerializer, RoleSerializer, SignUpSerializer, ChangePasswordSerializer
 
 
 # Create your views here.
+class DepartmentListView(generics.ListAPIView):
+    queryset = Department.objects.all().order_by('name')
+    serializer_class = DepartmentSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class RoleListView(generics.ListAPIView):
+    queryset = Role.objects.all().order_by('name')
+    serializer_class = RoleSerializer
+    permission_classes = (IsAuthenticated,)
+
+
 class CompanyCRUDViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class =  CompanySerializer

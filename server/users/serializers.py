@@ -1,7 +1,19 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.db import transaction
-from .models import Company, EmployeeUser
+from .models import Company, Department, EmployeeUser, Role
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ('id', 'name')
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ('id', 'name', 'department')
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -15,11 +27,13 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     department_name = serializers.CharField(source='department.name', read_only=True, allow_null=True)
+    company_name = serializers.CharField(source='company.name', read_only=True, allow_null=True)
+    role_name = serializers.CharField(source='role.name', read_only=True, allow_null=True)
 
     class Meta:
         model = EmployeeUser
         fields = ('id', 'first_name', 'last_name', 'email', 'phone', 'password', 'is_seo_user', 'is_employee',
-                  'company', 'department', 'department_name', 'role')
+                  'company', 'company_name', 'department', 'department_name', 'role', 'role_name')
         extra_kwargs = {
             'password': {'write_only': True},
             'email': {'read_only': True},
