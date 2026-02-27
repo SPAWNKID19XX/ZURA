@@ -2,9 +2,11 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+.vite
 # C extensions
 *.so
+.claude
+CLAUDE.md
 
 # Distribution / packaging
 .Python

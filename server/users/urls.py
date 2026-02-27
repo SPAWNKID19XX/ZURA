@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import CompanyCRUDViewSet, EmployeeUserCreateAPIView, MeIdentificationRetrieveUpdateDeleteAPIView, ChangePasswordView
+from .views import HireCrudEmployeeAPIView, CompanyCRUDViewSet, EmployeeSeoCreateAPIView, MeIdentificationRetrieveUpdateDeleteAPIView, ChangePasswordView, DepartmentListView, RoleListView
 from rest_framework import routers
 
 from rest_framework_simplejwt.views import (
@@ -11,16 +11,17 @@ from rest_framework_simplejwt.views import (
 router = routers.DefaultRouter()
 
 router.register('companies', CompanyCRUDViewSet, basename='companies')
-
+router.register(r'my_employeers', HireCrudEmployeeAPIView, basename='my_employeers')
 urlpatterns = [
     path('', include(router.urls)),
+    path('departments/', DepartmentListView.as_view(), name='departments'),
+    path('roles/', RoleListView.as_view(), name='roles'),
     path('change_password/', ChangePasswordView.as_view(), name='change_password'),
     path('my_account/', MeIdentificationRetrieveUpdateDeleteAPIView.as_view(), name='my_account'),
-    path('new_employeer/', EmployeeUserCreateAPIView.as_view(), name='SignUpSerializer'),
+    path('new_seo/', EmployeeSeoCreateAPIView.as_view(), name='new_seo'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-
     # Documentation (OpenAPI 3.0)
 
 

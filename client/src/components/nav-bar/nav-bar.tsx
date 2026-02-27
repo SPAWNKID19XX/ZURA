@@ -28,34 +28,34 @@ const  accountLinks: NavLink[] = [
 
 const navLinks: NavLink[] = [
     {
-        id: 0, 
-        option: "Workspace/Dashboard",
-        href: "/link_to_Workspace/Dashboard"
-    },
-    {  
-        id: 1, 
-        option: "Projects",
-        href: "/link_to_Projects"
-    },
-    {
-        id: 2, 
-        option: "Boards",
-        href: "/link_to_Boards"
-    },
-    {
-        id: 3, 
-        option: "Teams",
-        href: "/link_to_Teams"
-    },
-    {  
-        id: 4, 
+        id: 0,
         option: "My Tasks",
-        href: "/link_to_My Tasks"
+        href: "/tasks"
     },
     {
-        id: 5, 
+        id: 1,
+        option: "Projects",
+        href: "/projects"
+    },
+    {
+        id: 2,
+        option: "Boards",
+        href: "/boards"
+    },
+    {
+        id: 3,
+        option: "Teams",
+        href: "/teams"
+    },
+    {
+        id: 4,
+        option: "Employees",
+        href: "/employees"
+    },
+    {
+        id: 5,
         option: "Notifications",
-        href: "/link_to_Notifications"
+        href: "/notifications"
     }
 ]
 
