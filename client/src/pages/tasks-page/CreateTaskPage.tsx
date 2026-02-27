@@ -54,7 +54,7 @@ export function CreateTaskPage() {
     const mutation = useMutation({
         mutationFn: (data: Record<string, unknown>) => tasksApi.post('/', data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['myTasks'] })
+            queryClient.invalidateQueries({ queryKey: ['tasks'] })
             navigate('/tasks')
         },
         onError: () => setError('Failed to create task. Please check the fields and try again.'),

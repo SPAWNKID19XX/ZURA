@@ -6,6 +6,7 @@ import { AuthContext } from '../../api/authContext'
 import styles from './TasksPage.module.css'
 
 const api = getApi(`${import.meta.env.VITE_API_URL}/tasks/api/v1`)
+const employeesApi = getApi(`${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_APP_EMPLOYEE}`)
 
 interface Task {
     id: number
@@ -15,7 +16,26 @@ interface Task {
     priority: 'low' | 'medium' | 'high'
     due_date: string | null
     created_at: string
+    updated_at: string
     author: string
+    assigned_to: number | null
+    assigned_to_name: string | null
+}
+
+interface Employee {
+    id: number
+    first_name: string
+    last_name: string
+    email: string
+}
+
+interface EditForm {
+    title: string
+    description: string
+    status: Task['status']
+    priority: Task['priority']
+    due_date: string
+    assigned_to: number | ''
 }
 
 const STATUS_OPTIONS: { value: Task['status']; label: string }[] = [
@@ -32,34 +52,79 @@ const PRIORITY_LABELS: Record<Task['priority'], string> = {
 
 const TASK_CREATOR_DEPARTMENTS = ['QA', 'Development', 'DevOps', 'Cybersecurity', 'Design', 'Management', 'Business & Analysis']
 
+function formatDate(dateStr: string | null): string {
+    if (!dateStr) return '—'
+    return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+}
+
 export function TasksPage() {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     const { user } = useContext(AuthContext)!
     const canCreateTask = user?.is_seo_user || TASK_CREATOR_DEPARTMENTS.includes(user?.department_name ?? '')
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+    const [editForm, setEditForm] = useState<EditForm | null>(null)
     const [saving, setSaving] = useState(false)
 
     const { data: tasks, isLoading, isError } = useQuery<Task[]>({
-        queryKey: ['myTasks'],
+        queryKey: ['tasks'],
         queryFn: async () => {
-            const res = await api.get('/?mine=true')
+            const res = await api.get('/')
             return res.data
         },
     })
 
-    async function handleStatusChange(newStatus: Task['status']) {
-        if (!selectedTask || saving) return
+    const { data: employees } = useQuery<Employee[]>({
+        queryKey: ['employees'],
+        queryFn: () => employeesApi.get('/my_employeers/').then(r => r.data),
+    })
+
+    function openTask(task: Task) {
+        setSelectedTask(task)
+        setEditForm({
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            due_date: task.due_date ?? '',
+            assigned_to: task.assigned_to ?? '',
+        })
+    }
+
+    function closeTask() {
+        setSelectedTask(null)
+        setEditForm(null)
+    }
+
+    function handleFormChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+        setEditForm(prev => prev ? { ...prev, [e.target.name]: e.target.value } : prev)
+    }
+
+    function handleStatusClick(newStatus: Task['status']) {
+        setEditForm(prev => prev ? { ...prev, status: newStatus } : prev)
+    }
+
+    async function handleSave() {
+        if (!selectedTask || !editForm || saving) return
+        if (!editForm.title.trim()) return
         setSaving(true)
         try {
-            await api.patch(`/${selectedTask.id}/`, { status: newStatus })
-            const updated = { ...selectedTask, status: newStatus }
-            setSelectedTask(updated)
-            queryClient.setQueryData<Task[]>(['myTasks'], (old) =>
+            const payload: Record<string, unknown> = {
+                title: editForm.title.trim(),
+                description: editForm.description,
+                status: editForm.status,
+                priority: editForm.priority,
+                due_date: editForm.due_date || null,
+                assigned_to: editForm.assigned_to !== '' ? Number(editForm.assigned_to) : null,
+            }
+            const res = await api.patch(`/${selectedTask.id}/`, payload)
+            const updated: Task = { ...selectedTask, ...res.data }
+            queryClient.setQueryData<Task[]>(['tasks'], (old) =>
                 old?.map((t) => (t.id === selectedTask.id ? updated : t))
             )
+            closeTask()
         } catch {
-            alert('Failed to update status.')
+            alert('Failed to save changes.')
         } finally {
             setSaving(false)
         }
@@ -88,10 +153,13 @@ export function TasksPage() {
                     <li
                         key={task.id}
                         className={styles.item}
-                        onClick={() => setSelectedTask(task)}
+                        onClick={() => openTask(task)}
                     >
                         <div className={styles.item_header}>
-                            <span className={styles.item_title}>{task.title}</span>
+                            <div className={styles.item_title_row}>
+                                <span className={styles.item_id}>#{task.id}</span>
+                                <span className={styles.item_title}>{task.title}</span>
+                            </div>
                             <span className={`${styles.priority} ${styles[`priority_${task.priority}`]}`}>
                                 {PRIORITY_LABELS[task.priority]}
                             </span>
@@ -108,19 +176,61 @@ export function TasksPage() {
                 ))}
             </ul>
 
-            {selectedTask && (
-                <div className={styles.overlay} onClick={() => setSelectedTask(null)}>
+            {selectedTask && editForm && (
+                <div className={styles.overlay} onClick={closeTask}>
                     <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                        <button className={styles.close} onClick={() => setSelectedTask(null)}>✕</button>
-                        <h2 className={styles.modal_title}>{selectedTask.title}</h2>
+                        <button className={styles.close} onClick={closeTask}>✕</button>
 
-                        <div className={styles.modal_meta}>
-                            <span className={`${styles.priority} ${styles[`priority_${selectedTask.priority}`]}`}>
-                                {PRIORITY_LABELS[selectedTask.priority]}
-                            </span>
-                            {selectedTask.due_date && (
-                                <span className={styles.due_date}>Due: {selectedTask.due_date}</span>
-                            )}
+                        <input
+                            className={styles.modal_title_input}
+                            name="title"
+                            value={editForm.title}
+                            onChange={handleFormChange}
+                        />
+
+                        <div className={styles.modal_row}>
+                            <div className={styles.modal_field_edit}>
+                                <span className={styles.field_label}>Priority</span>
+                                <select
+                                    className={styles.modal_select}
+                                    name="priority"
+                                    value={editForm.priority}
+                                    onChange={handleFormChange}
+                                >
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div className={styles.modal_field_edit}>
+                                <span className={styles.field_label}>Due date</span>
+                                <input
+                                    className={styles.modal_input}
+                                    type="date"
+                                    name="due_date"
+                                    value={editForm.due_date}
+                                    onChange={handleFormChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className={styles.modal_field_edit}>
+                            <span className={styles.field_label}>Assigned to</span>
+                            <select
+                                className={styles.modal_select}
+                                name="assigned_to"
+                                value={editForm.assigned_to}
+                                onChange={handleFormChange}
+                            >
+                                <option value="">— Unassigned —</option>
+                                {employees?.map(emp => (
+                                    <option key={emp.id} value={emp.id}>
+                                        {emp.first_name && emp.last_name
+                                            ? `${emp.first_name} ${emp.last_name}`
+                                            : emp.email}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className={styles.status_row}>
@@ -129,9 +239,8 @@ export function TasksPage() {
                                 {STATUS_OPTIONS.map((opt) => (
                                     <button
                                         key={opt.value}
-                                        disabled={saving}
-                                        className={`${styles.status_btn} ${styles[`status_${opt.value}`]} ${selectedTask.status === opt.value ? styles.status_btn_active : ''}`}
-                                        onClick={() => handleStatusChange(opt.value)}
+                                        className={`${styles.status_btn} ${styles[`status_${opt.value}`]} ${editForm.status === opt.value ? styles.status_btn_active : ''}`}
+                                        onClick={() => handleStatusClick(opt.value)}
                                     >
                                         {opt.label}
                                     </button>
@@ -139,9 +248,38 @@ export function TasksPage() {
                             </div>
                         </div>
 
-                        <p className={styles.modal_author}>Author: {selectedTask.author}</p>
-                        <div className={styles.modal_description}>
-                            {selectedTask.description || <em>No description provided.</em>}
+                        <div className={styles.modal_fields}>
+                            <div className={styles.modal_field}>
+                                <span className={styles.field_label}>Author</span>
+                                <span className={styles.field_value}>{selectedTask.author}</span>
+                            </div>
+                            <div className={styles.modal_field}>
+                                <span className={styles.field_label}>Created</span>
+                                <span className={styles.field_value}>{formatDate(selectedTask.created_at)}</span>
+                            </div>
+                            <div className={styles.modal_field}>
+                                <span className={styles.field_label}>Updated</span>
+                                <span className={styles.field_value}>{formatDate(selectedTask.updated_at)}</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.modal_description_label}>Description</div>
+                        <textarea
+                            className={styles.modal_textarea}
+                            name="description"
+                            value={editForm.description}
+                            onChange={handleFormChange}
+                            rows={4}
+                        />
+
+                        <div className={styles.modal_footer}>
+                            <button
+                                className={styles.modal_save}
+                                onClick={handleSave}
+                                disabled={saving || !editForm.title.trim()}
+                            >
+                                {saving ? 'Saving...' : 'Save'}
+                            </button>
                         </div>
                     </div>
                 </div>
