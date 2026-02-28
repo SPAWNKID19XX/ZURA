@@ -384,3 +384,40 @@
     color: #374151;
     white-space: pre-wrap;
 }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1023px) {
+    .page { max-width: 100%; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .page { margin: 16px auto; }
+
+    .overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modal {
+        border-radius: 12px 12px 0 0;
+        padding: 20px 16px 24px;
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+    .modal_row      { grid-template-columns: 1fr; gap: 8px; }
+    .modal_fields   { grid-template-columns: 1fr; }
+    .status_buttons { flex-wrap: wrap; }
+}
+
+/* Small mobile */
+@media (max-width: 479px) {
+    .page_header { flex-wrap: wrap; gap: 10px; }
+    .title       { font-size: 20px; }
+    .item_footer { flex-wrap: wrap; }
+}

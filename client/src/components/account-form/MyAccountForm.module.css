@@ -54,3 +54,18 @@ form a:hover {
     text-decoration: underline;
     cursor: pointer;
 }
+
+/* ---- Responsive ---- */
+@media (max-width: 767px) {
+    .form_title,
+    .form_paragraf,
+    .form .pass_modal { width: 90%; }
+    form input        { width: 90%; }
+}
+
+@media (max-width: 479px) {
+    .form_title,
+    .form_paragraf,
+    .form .pass_modal { width: 100%; }
+    form input        { width: 100%; box-sizing: border-box; }
+}

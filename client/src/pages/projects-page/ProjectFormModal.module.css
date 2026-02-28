@@ -191,3 +191,27 @@
     opacity: 0.55;
     cursor: not-allowed;
 }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modal {
+        border-radius: 12px 12px 0 0;
+        padding: 24px 16px 28px;
+        max-height: 90vh;
+    }
+
+    .row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 479px) {
+    .footer { flex-direction: column-reverse; gap: 8px; }
+    .submit_btn, .cancel_btn { width: 100%; text-align: center; }
+}

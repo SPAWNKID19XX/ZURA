@@ -311,3 +311,41 @@
     background: #fef2f2;
     color: #dc2626;
 }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1023px) {
+    .page { max-width: 100%; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .page { margin: 16px auto; }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info_grid { grid-template-columns: 1fr; }
+
+    .task_item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .task_left,
+    .task_right { width: 100%; }
+
+    .task_right { flex-wrap: wrap; }
+}
+
+/* Small mobile */
+@media (max-width: 479px) {
+    .title { font-size: 20px; }
+    .section_title { font-size: 14px; }
+}

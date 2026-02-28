@@ -145,3 +145,26 @@
     background: #f3f4f6;
     color: #6b7280;
 }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1023px) {
+    .page { max-width: 100%; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .page        { margin: 16px auto; }
+    .page_header { flex-wrap: wrap; gap: 10px; }
+    .grid        { grid-template-columns: 1fr; }
+}
+
+/* Small mobile */
+@media (max-width: 479px) {
+    .title { font-size: 20px; }
+    .card  { padding: 14px; }
+}
