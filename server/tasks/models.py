@@ -38,6 +38,13 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name='tasks',
     )
+    project = models.ForeignKey(
+        'projects.Project',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='tasks',
+    )
 
     def __str__(self):
         return self.title

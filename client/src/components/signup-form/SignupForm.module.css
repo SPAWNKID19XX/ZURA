@@ -44,3 +44,21 @@ form .error_title {
 form .error_text {
     color: rgb(169, 142, 32);
 }
+
+/* ---- Responsive ---- */
+@media (max-width: 767px) {
+    .form_title          { width: 90%; }
+    form p               { width: 90%; }
+    form input           { width: 90%; }
+    form .error_container{ width: 90%; }
+}
+
+@media (max-width: 479px) {
+    .form_title,
+    form p,
+    form input,
+    form .error_container {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

@@ -8,6 +8,7 @@ import { MyAccountPage } from './pages/my-account-page/MyAccountPage'
 import { TasksPage } from './pages/tasks-page/TasksPage'
 import { CreateTaskPage } from './pages/tasks-page/CreateTaskPage'
 import { ProjectsPage } from './pages/projects-page/ProjectsPage'
+import { ProjectDetailPage } from './pages/projects-page/ProjectDetailPage'
 import { BoardsPage } from './pages/boards-page/BoardsPage'
 import { TeamsPage } from './pages/teams-page/TeamsPage'
 import { EmployeesPage } from './pages/employees-page/EmployeesPage'
@@ -19,7 +20,7 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<div>Главная страница Zura</div>} />
+        <Route path="/" element={<h1>Welcom to ZURA. Basic Task manager</h1>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route element={<ProtectedRoute />}>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/tasks/create" element={<CreateTaskPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/boards" element={<BoardsPage />} />
           <Route path="/teams" element={<TeamsPage />} />
           <Route path="/employees" element={<EmployeesPage />} />

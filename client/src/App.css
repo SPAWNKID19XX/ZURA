@@ -7,6 +7,17 @@
 .container {
   width: 90%;
   margin: 0 auto;
+  max-width: 1440px;
+}
+
+/* 4K */
+@media (min-width: 2560px) {
+  .container { max-width: 1800px; }
+}
+
+/* Small mobile */
+@media (max-width: 479px) {
+  .container { width: 94%; }
 }
 
 .logo {

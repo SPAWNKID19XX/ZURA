@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class TasksConfig(AppConfig):
+class ProjectsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'tasks'
+    name = 'projects'
 
     def ready(self):
-        import tasks.signals  # noqa: F401
+        import projects.signals  # noqa: F401

@@ -1,85 +1,131 @@
+/* ============================================
+   BASE (desktop-first, ≥ 1024px)
+   ============================================ */
 
 nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    position: relative;
+    min-height: 80px;
 }
 
 .logo {
-    width: 200px;
-    height: 200px;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
 }
 
 .logo img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
 }
 
-.nav_menu{
-    width:70%;
+/* Wrapper that holds nav_menu + account on desktop */
+.nav_body {
     display: flex;
-    margin: auto 0;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 24px;
+    gap: 16px;
 }
-.nav_menu ul{
+
+.nav_menu {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.nav_menu ul {
     width: 100%;
     display: flex;
-    margin: auto 0;
-    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    justify-content: space-around;
     list-style: none;
+    gap: 4px;
 }
 
-.nav_menu ul a{
+.nav_menu ul a {
     color: black;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
-.nav_menu ul li a:hover{
+.nav_menu ul li a:hover {
     color: rgb(210, 142, 16);
 }
 
-.prompt_msg{
+/* ---- Notification badge ---- */
+.nav_link_wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: #e53935;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ---- Not-logged-in prompt ---- */
+.prompt_msg {
     font-size: large;
     text-align: center;
     color: orange;
     width: 100%;
-
 }
 
 .neon_text {
     font-size: 30px;
     color: #fff;
-    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+    text-shadow:
+        0 0 5px  #ff005e,
+        0 0 10px #ff005e,
+        0 0 20px #ff005e,
+        0 0 40px #ff005e,
+        0 0 80px #ff005e;
     animation: glow 1.5s infinite alternate;
 }
 
 @keyframes glow {
-    0% {
-        text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
-    }
-    100% {
-        text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px #00d4ff, 0 0 160px #00d4ff;
-    }
+    0%   { text-shadow: 0 0 5px  #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px  #ff005e; }
+    100% { text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px #00d4ff, 0 0 160px #00d4ff; }
 }
 
-
-
-
-.account{
+/* ---- Account section ---- */
+.account {
     display: flex;
-    margin: auto 0;
+    align-items: center;
     position: relative;
+    flex-shrink: 0;
 }
 
-.account a{
-    color: black;
-}
-
-.account a:hover{
-    color: rgb(210, 142, 16);
-}
+.account a { color: black; }
+.account a:hover { color: rgb(210, 142, 16); }
 
 .account_link {
     padding: 10px 12px;
     display: inline-block;
     cursor: pointer;
+    white-space: nowrap;
+    font-size: 14px;
 }
 
 .submenu_login {
@@ -112,9 +158,185 @@ nav {
 .submenu_login li a {
     display: block;
     padding: 10px 14px;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
-.submenu_login li a:hover {
-    background: rgba(255, 255, 255, 0.12);
+.submenu_login li a:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* ---- Hamburger (hidden on desktop) ---- */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.hamburger_open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger_open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger_open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* ============================================
+   4K  (≥ 2560px)
+   ============================================ */
+@media (min-width: 2560px) {
+    .logo { width: 100px; height: 100px; }
+
+    .nav_menu ul a,
+    .account_link { font-size: 16px; }
+}
+
+
+/* ============================================
+   LAPTOP  (≤ 1279px)
+   ============================================ */
+@media (max-width: 1279px) {
+    .logo { width: 70px; height: 70px; }
+}
+
+
+/* ============================================
+   TABLET  (≤ 1023px)
+   ============================================ */
+@media (max-width: 1023px) {
+    .logo { width: 60px; height: 60px; }
+
+    .nav_menu ul a,
+    .account_link {
+        font-size: 13px;
+        padding: 8px 6px;
+    }
+}
+
+
+/* ============================================
+   MOBILE  (≤ 767px)  — hamburger menu
+   ============================================ */
+@media (max-width: 767px) {
+    .logo { width: 52px; height: 52px; }
+
+    /* Show hamburger */
+    .hamburger { display: flex; }
+
+    /* Hide desktop layout; become fullscreen dropdown when open */
+    .nav_body {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background: #ffffff;
+        border-top: 1px solid #e5e7eb;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+        padding: 8px 16px 20px;
+        z-index: 100;
+        gap: 0;
+    }
+
+    .nav_body_open { display: flex; }
+
+    /* Vertical nav list */
+    .nav_menu { width: 100%; flex: unset; }
+
+    .nav_menu ul {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0;
+        padding: 0;
+    }
+
+    .nav_menu ul li { border-bottom: 1px solid #f3f4f6; }
+    .nav_menu ul li:last-child { border-bottom: none; }
+
+    .nav_menu ul a {
+        display: block;
+        padding: 13px 4px;
+        font-size: 15px;
+        color: #213547;
+    }
+
+    /* Badge inline inside mobile list */
+    .nav_link_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .badge {
+        position: static;
+        top: unset;
+        right: unset;
+    }
+
+    /* Account section at the bottom of dropdown */
+    .account {
+        flex-direction: column;
+        align-items: flex-start;
+        position: static;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 8px;
+        margin-top: 4px;
+        width: 100%;
+    }
+
+    .account a { color: #213547; }
+
+    .account_link {
+        padding: 12px 4px;
+        font-size: 15px;
+        display: block;
+        width: 100%;
+    }
+
+    /* Static submenu in mobile */
+    .submenu_login {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        min-width: unset;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .submenu_login li a {
+        color: #213547;
+        padding: 12px 4px;
+        font-size: 15px;
+    }
+
+    .submenu_login li a:hover { background: #f9fafb; }
+
+    .prompt_msg { width: 100%; }
+
+    .neon_text { font-size: 18px; }
+}
+
+
+/* ============================================
+   SMALL MOBILE  (≤ 479px)
+   ============================================ */
+@media (max-width: 479px) {
+    .logo { width: 44px; height: 44px; }
 }
