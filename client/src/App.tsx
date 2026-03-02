@@ -20,7 +20,7 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<div>Главная страница Zura</div>} />
+        <Route path="/" element={<h1>Welcom to ZURA. Basic Task manager</h1>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route element={<ProtectedRoute />}>
